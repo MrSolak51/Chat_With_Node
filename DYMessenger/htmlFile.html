@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="channel_style.css">
+    <script src="https://kit.fontawesome.com/525104fbf5.js" crossorigin="anonymous"></script>
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io('http://127.0.0.1:1337/');
+        socket.emit("channelfixer","red");
+        socket.on('connect', function(){
+            
+            socket.on('message',function(msg, username, gender){
+                if (username == $("#username").val()) {
+                    if (gender=="male") {
+                    $("#message").append('<li style="background:blue">'+msg+'<span>you</span></li>');
+                    } 
+                    else if (gender=="female") {
+                        $("#message").append('<li style="background:pink">'+msg+'<span>you</span></li>');
+                    } 
+                    else {
+                        $("#message").append('<li style="background-image:linear-gradient(90deg, #fdcb6e 0%, #a29bfe 20%, #0984e3 40%, #e84393 60%, #d63031 80%, #ffeaa7 100%)">'+msg+'<span>you</span></li>');
+                    }
+                } 
+                else {
+                    if (gender=="male") {
+                    $("#message").append('<li id="other-li" style="background:blue">'+msg+'<span id="other-span">'+username+'</span></li>');
+                    } 
+                    else if (gender=="female") {
+                        $("#message").append('<li id="other-li" style="background:pink">'+msg+'<span id="other-span">'+username+'</span></li>');
+                    } 
+                    else {
+                        $("#message").append('<li id="other-li" style="background-image:linear-gradient(90deg, #fdcb6e 0%, #a29bfe 20%, #0984e3 40%, #e84393 60%, #d63031 80%, #ffeaa7 100%)">'+msg+'<span id="other-span">'+username+'</span></li>');
+                    }
+                }
+                document.getElementById("right").scrollTo(0, document.getElementById("right").scrollHeight);
+            });
+        });
+    </script>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: lightgray;
+        }
+
+        #section{
+            width: 70%;
+            height: 60vh;
+            background: grey;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        #left{
+            width: 70%;
+            height: 60vh;
+            background: bisque;
+            position: absolute;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            /*visibility: hidden;*/
+        }
+        #login{
+            background: bisque;
+            width: 43%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        #register{
+            width: 43%;
+            height: 10%;
+            cursor: pointer;
+        }
+        #right{
+            float: right;
+            width: 95%;
+            height: 80%;
+            background: whitesmoke;
+            overflow: hidden;
+            overflow-y: scroll;
+            border-radius: 10px;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            scroll-behavior: smooth;
+        }
+        #right::-webkit-scrollbar {
+          display: none;
+        }
+
+        #username_{
+            position: relative;
+            left: 120px;
+            top: -70px;
+        }
+        #message{
+            list-style-type: none;
+            display: flex;
+            flex-grow: 1;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+        #message li{
+            background: black;
+            color: white;
+            position: relative;
+            max-width: 80%;
+            border-radius: 10px;
+            align-self: flex-end;
+            padding: 20px 5px 5px 5px;
+            min-width: 50%;
+            margin-top: 10px;
+            word-wrap:break-word;
+        }
+        #message li p{
+            color: green;
+            position: absolute;
+            width: 100%;
+            bottom: 0;
+            left: 0;
+        }
+        #message li span{
+            color: whitesmoke;
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 5px 5px 5px 5px;
+            font-weight: bold;
+            font-size: x-small;
+        }
+        #message #other-li{
+            align-self: flex-start;
+        }
+        #message #other-li #other-span{
+            width: auto;
+            color: white;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        #tweet{
+            width: 85%;
+            height: 100%;
+            border-radius: 10px;
+        }
+        #sender{
+            height: 100%;
+            width: 13%;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        #user{
+            height: 10%;
+
+        }
+        #send-message{
+            height: 10%;
+            width: 95%;
+        }
+        #user{
+            color: white;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            $("#register").click(function(){
+                uname = $("#username").val();
+                gender = $('#gender').val();
+                socket.emit("register", uname, gender);
+                if ($("#username").val() != '') {
+                    document.getElementById("left").style.visibility="hidden";
+                    document.getElementById("user").innerText=$("#username").val();
+                }
+                else{
+                    alert("Please enter your name !!!!!");
+                }
+
+                if (gender=="male") {
+                    document.getElementById("section").style.background="blue";
+
+                    document.getElementById("sender").addEventListener("mouseenter",()=>{
+                        document.getElementById("sender").style.background="blue";
+                    });
+                    document.getElementById("sender").addEventListener("mouseleave",()=>{
+                        document.getElementById("sender").style.background="whitesmoke";
+                    });
+
+                } 
+                else if (gender=="female") {
+                    document.getElementById("section").style.background="pink";
+
+                    document.getElementById("sender").addEventListener("mouseenter",()=>{
+                        document.getElementById("sender").style.background="pink";
+                    });
+                    document.getElementById("sender").addEventListener("mouseleave",()=>{
+                        document.getElementById("sender").style.background="whitesmoke";
+                    });
+                } 
+                else {
+                    document.getElementById("section").style.backgroundImage="linear-gradient(90deg, #fdcb6e 0%, #a29bfe 20%, #0984e3 40%, #e84393 60%, #d63031 80%, #ffeaa7 100%)";
+                    
+                    document.getElementById("sender").addEventListener("mouseenter",()=>{
+                        document.getElementById("sender").style.backgroundImage="linear-gradient(90deg, #fdcb6e 0%, #a29bfe 20%, #0984e3 40%, #e84393 60%, #d63031 80%, #ffeaa7 100%)";
+                    });
+                    document.getElementById("sender").addEventListener("mouseleave",()=>{
+                        document.getElementById("sender").style.background="whitesmoke";
+                    });
+                }
+            });
+
+            $("#sender").click(function(){
+                tweet = $("#tweet").val();
+                if (tweet!='') {
+                    socket.send(tweet);
+                    document.getElementById("tweet").value="";
+                } else {
+                    alert("please enter your message!!!!");
+                }
+            });
+        });
+    </script>
+    <title>Hello World</title>
+</head>
+<body>
+    <h1 id="online-users"></h1>
+    <article id="section">
+        <div id="left">
+            <div id="login">
+                <div>
+                    <label for="username">Name</label>
+                    <input type="text" placeholder="username" id="username" class="form-control"><br>
+                    
+                    <label for="gender">Gender</label>
+                    <select name="gender" id="gender">
+                        <option value="female">Female</option>
+                        <option value="male">Male</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </div>
+            <button id="register">Register me!</button>  
+        </div> 
+        <h1 id="user">User</h1>
+        <div id="right">
+            <div>
+                <ul id="message">
+
+                </ul>
+            </div> 
+        </div>
+        <div id="send-message">
+            <input type="text" name="" id="tweet" class="message-input">
+            <button id="sender"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </article>
+</body>
+</html>

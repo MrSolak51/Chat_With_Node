@@ -1,0 +1,1 @@
+type nodemon server.js in terminal (for the server) and enter http://127.0.0.1:1337 in your search engine

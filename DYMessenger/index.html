@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <title>DyMsn</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        #section{
+            width: 100%;
+            height: 100vh;
+            background-color: aqua;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #section div{
+            width: 100%;
+            height: 100%;
+        }
+        #section #select{
+            width: 50%;
+        }
+        #section #room{
+            width: 100%;
+            height: 30%;
+            font-size: 1000%;
+        }
+        #section #room option{
+            font-size: 90%;
+        }
+        #section label{
+            font-size: 1000%;
+            text-align: center;
+        }
+        #section #select{
+            width: 100%;
+            height: 45%;
+            font-size: 1000%;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            $("#select").click(function(){
+                var room = $("#room").val();
+                if (room=='over18') {
+                    location.href='http://127.0.0.1:1337/over18';
+                } else {
+                    location.href='http://127.0.0.1:1337/under18';
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <article id="section">
+        <div>
+            <label for="room">Room</label>
+            <select name="room" id="room">
+                <option value="over18">Over 18 Room</option>
+                <option value="under18">Under 18 Room</option>
+            </select>
+            <button id="select">Select Room</button>
+        </div>
+    </article>
+</body>
+</html>
